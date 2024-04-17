@@ -34,11 +34,11 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:todo).permit(:username, :email, :password)
+    params.require(:user).permit(:username, :email, :password)
   end
 
   def update_params
-    params.require(:todo).permit(:email, :password)
+    params.require(:user).permit(:email, :password)
   end
 
   def handle_parameter_missing(e)

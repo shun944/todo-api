@@ -115,7 +115,7 @@ development:
 
 test:
   <<: *default
-  database: todoDB-test
+  database: todoDB_test
 
 production:
   <<: *default
