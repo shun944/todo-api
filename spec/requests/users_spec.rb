@@ -4,15 +4,12 @@ RSpec.describe 'Users API', type: :request do
   let!(:users) { create_list(:user, 10) }
   let(:user_id) { users.first.id }
 
-  # Test suite for POST /todos
   describe 'POST /user' do
-    # valid payload
     let(:valid_attributes) { { user: { username: 'testUser', email: 'testmail@example.com' } } }
     
     context 'when the request is valid' do
       before { post '/users', params: valid_attributes }
       
-
       it 'creates a user' do
         response_json = JSON.parse(response.body)
         expect(response_json['username']).to eq('testUser')
