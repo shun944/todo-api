@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe 'Todos API', type: :request do
   let!(:user) { create(:user) }
   let!(:user_id) { user.id }
+  let!(:user2) { create(:user) }
+  let!(:user_id2) { user2.id }
   let!(:todos) { create_list(:todo, 10, user: user) }
+  let!(:todos_second) { { create_list(:todo, 5, user:user2 ) } }
   let(:todo_id) { todos.first.id }
 
   describe 'GET /todos' do
@@ -18,6 +21,10 @@ RSpec.describe 'Todos API', type: :request do
     it 'returns status code 200' do
       expect(response).to have_http_status(200)
     end
+  end
+
+  describe 'GET /todos/:user_id' do
+    before { get 'todos/' }
   end
 
   describe 'GET /todos:/:id' do

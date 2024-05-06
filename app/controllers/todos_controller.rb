@@ -2,7 +2,12 @@ class TodosController < ApplicationController
   before_action :set_todo, only: [:show, :update, :destroy]
 
   def index
-    @todos = Todo.all
+    #@todos = Todo.all
+    if params[:user_id]
+      @todos = Todo.where(user_id: params[:user_id])
+    else
+      @todos = Todo.all
+    end
     render json: @todos
   end
 
