@@ -5,7 +5,7 @@ class TodosController < ApplicationController
     #@todos = Todo.all
     if params[:user_id]
       @todos = Todo.where(user_id: params[:user_id])
-    elif params[:category]
+    elsif params[:category]
       @todos = Todo.where(category: params[:category])
     else
       @todos = Todo.all
