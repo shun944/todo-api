@@ -5,8 +5,8 @@ RSpec.describe 'Todos API', type: :request do
   let!(:user_id) { user.id }
   let!(:user2) { create(:user) }
   let!(:user_id2) { user2.id }
-  let!(:todos) { create_list(:todo, 10, user: user) }
-  let!(:todos_second) { { create_list(:todo, 5, user:user2 ) } }
+  let!(:todos) { create_list(:todo, 10, user: user, category: "category1") }
+  let!(:todos_second) { create_list(:todo, 5, user: user2, category: "category2") }
   let(:todo_id) { todos.first.id }
 
   describe 'GET /todos' do
@@ -15,7 +15,7 @@ RSpec.describe 'Todos API', type: :request do
     it 'returns todo' do
       response_json = JSON.parse(response.body)
       expect(response_json).not_to be_empty
-      expect(response_json.size).to eq 10
+      expect(response_json.size).to eq 15
     end
 
     it 'returns status code 200' do
@@ -24,7 +24,27 @@ RSpec.describe 'Todos API', type: :request do
   end
 
   describe 'GET /todos/:user_id' do
-    before { get 'todos/' }
+    before { get "/todos", params: { user_id: user_id } }
+
+    context 'when user_id is present' do
+      it 'returns correct todos' do
+        response_json = JSON.parse(response.body)
+        expect(response_json.size).to eq(10);
+        expect(response_json[0]['user_id']).to eq(user_id)
+      end
+    end
+  end
+
+  describe 'GET /todos/:category' do
+    before { get "/todos", params: { category: "category1" } }
+
+    context 'when category is present' do
+      it 'returns correct todos' do
+        response_json = JSON.parse(response.body)
+        expect(response_json.size).to eq(10)
+        expect(response_json[0]['category']).to eq("category1")
+      end
+    end
   end
 
   describe 'GET /todos:/:id' do
@@ -43,7 +63,7 @@ RSpec.describe 'Todos API', type: :request do
     end
 
     context 'when the record does not exist' do
-      let(:todo_id) { 100 }
+      let(:todo_id) { 99999 }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
