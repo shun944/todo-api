@@ -64,17 +64,33 @@ development:
 # And be sure to use new-style password hashing:
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
 #
+
+########mysql settings##################################################################################
+# default: &default
+#   adapter: mysql2
+#   encoding: utf8mb4
+#   charset: utf8mb4
+#   collation: utf8mb4_bin
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#   username: root
+#   password:
+#   host: localhost
+#   database: todoDB
+#   socket: /tmp/mysql.sock
+##########################################################################################
+
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
-  charset: utf8mb4
-  collation: utf8mb4_bin
+  adapter: postgresql
+  encoding: unicode
+  # charset: utf8mb4
+  # collation: utf8mb4_bin
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: root
-  password:
+  username: admin
+  password: adminpass
   host: localhost
-  database: todoDB
-  socket: /tmp/mysql.sock
+  port: 5434
+  database: tododb
+  # socket: /tmp/mysql.sock
 
 # development:
 #   <<: *default
@@ -111,12 +127,16 @@ default: &default
 
 development:
   <<: *default
-  database: todoDB
+  # database: todoDB
 
 test:
   <<: *default
-  database: todoDB_test
+  # database: todoDB_test
 
 production:
   <<: *default
-  database: todoDB
+  database: tododb-aws
+  username: <%= ENV.fetch('DB_USERNAME', 'username') %>
+  password: <%= ENV.fetch('DB_PASSWORD', 'password') %>
+  host: <%= ENV.fetch('DB_HOST', nil) %>
+

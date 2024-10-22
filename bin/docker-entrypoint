@@ -1,8 +1,15 @@
 #!/bin/bash -e
 
+export RAILS_ENV="production"
+export BUNDLE_DEPLOYMENT="1"
+export BUNDLE_PATH="/usr/local/bundle"
+export BUNDLE_WITHOUT="development"
+
+cd /app
 # If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
+if [ "${1}" == "./app/bin/rails" ] && [ "${2}" == "server" ]; then
+  bin/rails db:prepare
+  cd ..
 fi
 
 exec "${@}"

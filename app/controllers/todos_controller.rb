@@ -1,15 +1,14 @@
 class TodosController < ApplicationController
-  before_action :set_todo, only: [:show, :update, :destroy]
+  before_action :set_todo, only: [:update, :destroy]
+  before_action :set_todo_with_category, only: [:show]
 
   def index
-    #@todos = Todo.all
-    if params[:user_id]
-      @todos = Todo.where(user_id: params[:user_id])
-    elsif params[:category]
-      @todos = Todo.where(category: params[:category])
-    else
-      @todos = Todo.all
-    end
+    conditions = TodoSearchService.build_conditions(params)
+    limit = params[:limit].to_i
+    @todos = Todo.where(conditions.reduce(:and))
+    @todos = @todos.limit(limit) if limit.positive?
+    @todos = @todos.order(due_date: :desc).map(&:with_category)
+
     render json: @todos
   end
 
@@ -21,7 +20,7 @@ class TodosController < ApplicationController
     @todo = Todo.create!(todo_params)
 
     if @todo.save
-      render json: @todo, status: :created
+      render json: @todo.with_category, status: :created
     else
       render json: @todo.errors, status: :unprocessable_entity
     end
@@ -29,7 +28,7 @@ class TodosController < ApplicationController
 
   def update
     if @todo.update(update_params)
-      render json: @todo
+      render json: @todo.with_category
     else
       render json: @todo.errors, status: :unprocessable_entity
     end
@@ -46,11 +45,18 @@ class TodosController < ApplicationController
     @todo = Todo.find(params[:id])
   end
 
+  def set_todo_with_category
+    @todo = Todo.find(params[:id])
+    category = @todo.category_master.category_name
+    @todo = @todo.attributes
+    @todo["category"] = category
+  end
+
   def todo_params
-    params.require(:todo).permit(:title, :description, :due_date, :completed, :category, :user_id)
+    params.require(:todo).permit(:title, :description, :due_date, :completed, :category_master_id, :user_id, :start_date)
   end
 
   def update_params
-    params.require(:todo).permit(:title, :description, :due_date, :completed, :category)
+    params.require(:todo).permit(:title, :description, :due_date, :completed, :category_master_id, :start_date)
   end
 end

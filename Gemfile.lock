@@ -76,11 +76,12 @@ GEM
       mutex_m
       tzinfo (~> 2.0)
     base64 (0.2.0)
-    bigdecimal (3.1.7)
+    bcrypt (3.1.20)
+    bigdecimal (3.1.8)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
     builder (3.2.4)
-    concurrent-ruby (1.2.3)
+    concurrent-ruby (1.3.4)
     connection_pool (2.4.1)
     crass (1.0.6)
     database_cleaner-active_record (2.1.0)
@@ -103,12 +104,14 @@ GEM
       i18n (>= 1.8.11, < 2)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    i18n (1.14.4)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     io-console (0.7.2)
     irb (1.12.0)
       rdoc
       reline (>= 0.4.2)
+    jwt (2.8.2)
+      base64
     loofah (2.22.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -119,10 +122,9 @@ GEM
       net-smtp
     marcel (1.0.4)
     mini_mime (1.1.5)
-    minitest (5.22.3)
+    minitest (5.25.1)
     msgpack (1.7.2)
     mutex_m (0.2.0)
-    mysql2 (0.5.6)
     net-imap (0.4.10)
       date
       net-protocol
@@ -145,12 +147,15 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
+    pg (1.5.8)
     psych (5.1.2)
       stringio
     puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.7.3)
     rack (3.0.10)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -235,13 +240,16 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  bcrypt (~> 3.1.7)
   bootsnap
   database_cleaner-active_record
   debug
   factory_bot_rails
   faker
-  mysql2
+  jwt
+  pg
   puma (>= 5.0)
+  rack-cors
   rails (~> 7.1.3, >= 7.1.3.2)
   rspec-rails (~> 5.0)
   sqlite3 (~> 1.4)
