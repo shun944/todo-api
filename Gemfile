@@ -15,7 +15,7 @@ gem "puma", ">= 5.0"
 
 gem "pg"
 
-gem 'rack-cors'
+gem 'rack-cors', require: 'rack/cors'
 
 gem 'jwt'
 
@@ -38,6 +38,9 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
+
+# For aws s3
+gem 'aws-sdk-s3', '~> 1.48'
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"

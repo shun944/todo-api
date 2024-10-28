@@ -17,6 +17,11 @@ FROM base AS build
 # Rails app lives here
 WORKDIR /app
 
+# For puma
+RUN mkdir -p /app/tmp/sockets /app/tmp/pids && \
+    chmod -R 777 /app/tmp
+
+
 # Bundlerのバージョンを合わせる
 RUN gem install bundler -v 2.5.7
 
@@ -67,6 +72,8 @@ COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /app /app
 
 RUN mkdir -p db log storage tmp
+
+RUN chmod -R 777 /app/tmp
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
