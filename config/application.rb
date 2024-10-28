@@ -29,14 +29,18 @@ module TodoApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.insert_before 0, Rack::Cors do
-      allow do
-        origins 'localhost:4200'
-        origins 'localhost:3001'
-        resource '*',
-          headers: :any,
-          methods: [:get, :post, :put, :patch, :delete, :options, :head]
-      end
-    end
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore
+
+    # config.middleware.insert_before 0, Rack::Cors do
+    #   allow do
+    #     origins 'localhost:4200', 'localhost:3001', 'localhost:3000', 'https://web.mon944.com'
+    #     resource '*',
+    #       headers: :any,
+    #       methods: [:get, :post, :put, :patch, :delete, :options, :head],
+    #       expose: ['Content-Length', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials', 'Access-Control-Allow-Methods', 'Access-Control-Allow-Headers'],
+    #       credentials: true
+    #   end
+    # end
   end
 end
